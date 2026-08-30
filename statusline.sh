@@ -33,16 +33,16 @@ $(jq -r '[
     (.thresholds.weekly_warn_pct // 60),
     (.display.session_activity_threshold_minutes // 5),
     (.paths.claude_projects // "~/.claude/projects/"),
-    (.alerts.notify_on_critical // true),
-    (.sections.directory // true),
-    (.sections.model // true),
-    (.sections.effort // true),
-    (.sections.git_branch // true),
-    (.sections.context // true),
-    (.sections.session // true),
-    (.sections.weekly // true),
-    (.sections.lines_changed // true),
-    (.sections.active_sessions // true)
+    (.alerts.notify_on_critical | if . == null then true else . end),
+    (.sections.directory | if . == null then true else . end),
+    (.sections.model | if . == null then true else . end),
+    (.sections.effort | if . == null then true else . end),
+    (.sections.git_branch | if . == null then true else . end),
+    (.sections.context | if . == null then true else . end),
+    (.sections.session | if . == null then true else . end),
+    (.sections.weekly | if . == null then true else . end),
+    (.sections.lines_changed | if . == null then true else . end),
+    (.sections.active_sessions | if . == null then true else . end)
 ] | map(tostring) | join("\u001f")' <<< "$CFG")
 EOF
 
@@ -138,6 +138,16 @@ _countdown() { # $1=epoch -> "3h 12m" / "45m" / ""
     else echo "$(( secs / 60 ))m"; fi
 }
 
+_countdown_days() { # $1=epoch -> "2d" (nearest day) / "<1d" / ""
+    local at=$1 now secs days
+    [ -z "$at" ] && { echo ""; return; }
+    now=$(date +%s); secs=$(( at - now ))
+    [ "$secs" -le 0 ] && { echo ""; return; }
+    days=$(( (secs + 43200) / 86400 ))
+    [ "$days" -lt 1 ] && { echo "<1d"; return; }
+    echo "${days}d"
+}
+
 _notify() { # one-shot desktop notification, best effort, never blocks
     local msg="$1"
     if command -v osascript >/dev/null 2>&1; then
@@ -167,7 +177,7 @@ MARKER="/tmp/claude-ctx-alert-${SESSION_ID}"
 if [ "$CTX_STATE" = "crit" ]; then
     if [ "$NOTIFY_CRIT" = "true" ] && [ ! -f "$MARKER" ]; then
         touch "$MARKER"
-        _notify "Context at ${CTX_PCT}% in ${DIR_NAME} — compact or restart"
+        _notify "Context at ${CTX_PCT}% in ${DIR_NAME} — run handoff, then clear"
     fi
 else
     rm -f "$MARKER" 2>/dev/null
@@ -204,8 +214,8 @@ EFFORT_ABBR=$(_abbrev_effort "$EFFORT_LEVEL")
 
 if [ "$SHOW_CTX" = "true" ]; then
     case "$CTX_STATE" in
-        crit) CTX_SEG="${C_INVRED} ⚠ CTX ${CTX_PCT}% — COMPACT/RESTART ${C_RESET} ${C_RED}${CTX_USED_K}k/${CTX_SIZE_K}k${C_RESET}" ;;
-        warn) CTX_SEG="${C_ORANGE}${CTX_USED_K}k/${CTX_SIZE_K}k $(_bar "$CTX_PCT") ${CTX_PCT}% ⚠${C_RESET}" ;;
+        crit) CTX_SEG="${C_INVRED} ⚠ CTX ${CTX_PCT}% — HANDOFF + CLEAR ${C_RESET} ${C_RED}${CTX_USED_K}k/${CTX_SIZE_K}k${C_RESET}" ;;
+        warn) CTX_SEG="${C_ORANGE}${CTX_USED_K}k/${CTX_SIZE_K}k $(_bar "$CTX_PCT") ${CTX_PCT}% ⚠ COMPACT${C_RESET}" ;;
         *)    CTX_SEG="${C_PINK}${CTX_USED_K}k/${CTX_SIZE_K}k $(_bar "$CTX_PCT") ${CTX_PCT}%${C_RESET}" ;;
     esac
     PARTS+=("$CTX_SEG")
@@ -213,16 +223,15 @@ fi
 
 if [ "$SHOW_SESSION" = "true" ] && [ -n "$S5_PCT_RAW" ]; then
     S5_PCT=$(printf '%.0f' "$S5_PCT_RAW")
-    S5_LEFT=$(_countdown "$S5_RESET")
     S5_COLOR="$C_PURPLE"; [ "$S5_PCT" -ge "$SESS_WARN_PCT" ] && S5_COLOR="$C_ORANGE"
     [ "$S5_PCT" -ge 90 ] && S5_COLOR="$C_RED"
-    SEG="5h ${S5_PCT}%"; [ -n "$S5_LEFT" ] && SEG="${SEG} → ${S5_LEFT}"
+    SEG="5h ${S5_PCT}%"
     PARTS+=("${S5_COLOR}${SEG}${C_RESET}")
 fi
 
 if [ "$SHOW_WEEKLY" = "true" ] && [ -n "$W7_PCT_RAW" ]; then
     W7_PCT=$(printf '%.0f' "$W7_PCT_RAW")
-    W7_LEFT=$(_countdown "$W7_RESET")
+    W7_LEFT=$(_countdown_days "$W7_RESET")
     W7_COLOR=""; [ "$W7_PCT" -ge "$WEEK_WARN_PCT" ] && W7_COLOR="$C_ORANGE"
     [ "$W7_PCT" -ge 85 ] && W7_COLOR="$C_RED"
     SEG="wk ${W7_PCT}%"; [ -n "$W7_LEFT" ] && SEG="${SEG} → ${W7_LEFT}"

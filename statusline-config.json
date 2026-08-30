@@ -1,14 +1,14 @@
 {
   "thresholds": {
     "context_warn_pct": 40,
-    "context_critical_pct": 50,
+    "context_critical_pct": 61,
     "session_warn_pct": 70,
     "weekly_warn_pct": 60,
-    "comment": "Context: orange warn at 40%, red COMPACT banner + one desktop notification at 50%. Session/weekly turn orange at their warn pct, red near exhaustion."
+    "comment": "Context: orange COMPACT warning at 40%, red HANDOFF + CLEAR banner plus one desktop notification at 61%. Session/weekly turn orange at their warn pct, red near exhaustion."
   },
   "alerts": {
     "notify_on_critical": true,
-    "comment": "Desktop notification (macOS/Linux) once per session when context crosses critical. Re-arms after you compact or restart."
+    "comment": "Desktop notification (macOS/Linux/Windows) once per session when context crosses critical. Re-arms after you compact or restart."
   },
   "display": {
     "bar_length": 10,
@@ -22,9 +22,9 @@
     "context": true,
     "session": true,
     "weekly": true,
-    "lines_changed": true,
-    "active_sessions": true,
-    "comment": "session = 5h rate-limit window, weekly = 7-day window, both from Claude Code's own rate_limits data. active_sessions counts Claude Code sessions on THIS machine only."
+    "lines_changed": false,
+    "active_sessions": false,
+    "comment": "session = 5h rate-limit window (percentage only), weekly = 7-day window (percentage + days to reset), both from Claude Code's own rate_limits data."
   },
   "paths": {
     "claude_projects": "~/.claude/projects/"

@@ -3,7 +3,7 @@
 One statusline for every machine running Claude Code. No ccusage, no npx, ~60ms per refresh. Session and weekly usage come straight from Claude Code's own `rate_limits` data, so they match claude.ai/settings/usage exactly.
 
 ```
-coveconstruct | o5(1m) | hi | 240k/1000k [██░░░░░░░░] 24% | 5h 44% → 2h 3m | wk 62% → 2d 4h | +412/-88 | ×2
+coveconstruct | o5(1m) | hi | main | 240k/1000k [██░░░░░░░░] 24% | 5h 44% | wk 62% → 2d
 ```
 
 ## Install (any machine)
@@ -16,13 +16,13 @@ Re-run the same command to update. Your local `statusline-config.json` is never 
 
 ## Context alerts
 
-- At **40%** context: bar turns orange with a ⚠.
-- At **50%** context: inverted red banner `⚠ CTX 52% — COMPACT/RESTART` plus one desktop notification (macOS/Linux). It fires once per session and re-arms after you compact or restart.
+- **40–60%** context: bar turns orange and says `⚠ COMPACT`.
+- **61%+** context: inverted red banner `⚠ CTX 72% — HANDOFF + CLEAR` plus one desktop notification. It fires once per session and re-arms after you compact or restart.
 
 Change thresholds in `~/.claude/statusline/statusline-config.json`:
 
 ```json
-"thresholds": { "context_warn_pct": 40, "context_critical_pct": 50 }
+"thresholds": { "context_warn_pct": 40, "context_critical_pct": 61 }
 ```
 
 ## Segments
@@ -34,10 +34,10 @@ Change thresholds in `~/.claude/statusline/statusline-config.json`:
 | effort | effort.level or settings.json | lo/md/hi/xh/mx |
 | git branch | local git | hidden outside repos |
 | context | context_window | tokens, bar, %, alerts |
-| 5h window | rate_limits.five_hour | % used → time to reset; orange at 70%, red at 90% |
-| weekly | rate_limits.seven_day | % used → time to reset; orange at 60%, red at 85% |
-| +N/-N | cost.total_lines_* | lines added/removed this session |
-| ×N | ~/.claude/projects mtimes | active sessions on this machine only |
+| 5h window | rate_limits.five_hour | % used; orange at 70%, red at 90% |
+| weekly | rate_limits.seven_day | % used → whole days to reset; orange at 60%, red at 85% |
+| +N/-N | cost.total_lines_* | lines added/removed this session (off by default) |
+| ×N | ~/.claude/projects mtimes | active sessions on this machine only (off by default) |
 
 Every segment can be toggled off in `sections`. Rate-limit percentages are shared across all machines on the subscription automatically, because Claude Code reports them per account, not per machine.
 
