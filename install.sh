@@ -38,7 +38,17 @@ chmod +x "$DEST/statusline.sh"
 mkdir -p "$HOME/.claude"
 [ -f "$SETTINGS" ] || echo '{}' > "$SETTINGS"
 cp "$SETTINGS" "$SETTINGS.bak"
-jq --arg cmd "$DEST/statusline.sh" \
+# Windows shells (PowerShell) will not execute a bare .sh path, so prefix bash there.
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*)
+        SL_PATH="$DEST/statusline.sh"
+        command -v cygpath >/dev/null 2>&1 && SL_PATH="$(cygpath -m "$SL_PATH")"
+        SL_CMD="bash \"$SL_PATH\""
+        ;;
+    *)                    SL_CMD="$DEST/statusline.sh" ;;
+esac
+
+jq --arg cmd "$SL_CMD" \
    '.statusLine = {type: "command", command: $cmd, padding: 0}' \
    "$SETTINGS" > "$SETTINGS.tmp" && mv "$SETTINGS.tmp" "$SETTINGS"
 
