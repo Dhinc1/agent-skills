@@ -105,7 +105,7 @@ _abbrev_model() {
         *) echo "$n"; return ;;
     esac
     v=$(grep -oE '[0-9]+\.[0-9]+' <<< "$n" | head -1)
-    [ -z "$v" ] && v=$(grep -oE '[0-9]+' <<< "$n" | tail -1)
+    [ -z "$v" ] && v=$(grep -oE '[0-9]+' <<< "$n" | head -1)
     local sfx=""
     [ "${CTX_SIZE:-0}" -ge 900000 ] 2>/dev/null && sfx="(1m)"
     echo "${p}${v}${sfx}"
