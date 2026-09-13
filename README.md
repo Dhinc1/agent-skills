@@ -49,7 +49,7 @@ measured-off-linework).
 
 | File | What it is |
 |---|---|
-| `SKILL.md` | The skill definition — workflow, sheet-summary template, confidence rules, estimating process. Declares itself as `land-plan-reader`. |
+| `SKILL.md` | The skill definition — workflow, sheet-summary template, confidence rules, estimating process. |
 | `scripts/preprocess_plans.py` | Deterministic prep. Splits a plan set into per-sheet `.txt`, `.png`, optional `.pdf`, and a `manifest.json`. Requires `pymupdf`. |
 | `references/pay_items.md` | Pay-item catalog by division, with unit of measure and takeoff basis. Built from real bids; enrich as projects add items. |
 | `references/scope_kickoff.md` | Pre-estimate scoping template — which divisions to include, segregated scopes, exclusions. |

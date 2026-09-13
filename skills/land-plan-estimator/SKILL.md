@@ -1,5 +1,5 @@
 ---
-name: land-plan-reader
+name: land-plan-estimator
 description: >-
   Read, index, measure, and estimate from land-development / civil site plan
   sets delivered as PDFs (subdivision layouts, grading & drainage, utility
@@ -15,7 +15,7 @@ description: >-
   workflow instead.
 ---
 
-# Land Plan Reader
+# Land Plan Estimator
 
 ## Why this exists
 

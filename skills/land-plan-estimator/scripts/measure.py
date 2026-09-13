@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Measurement engine for land-plan-reader (v2).
+Measurement engine for land-plan-estimator (v2).
 
 This is the "plumbing" half of the skill: deterministic geometry and text
 extraction. All *judgement* — which tags to count, which region holds the
