@@ -1,0 +1,7 @@
+# Generated preprocessing output (per-project, not part of the skill itself)
+*_sheets/
+plans.db
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
