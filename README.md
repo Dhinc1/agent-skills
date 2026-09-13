@@ -1,26 +1,29 @@
 # agent-skills
 
-A catalog of the agent skills and developer tools used across CoveConstruct work.
-One repo, one place to clone, one place to update — rather than a scattering of
-single-purpose repos.
+A catalog of the agent skills and operating doctrine used across CoveConstruct
+work. One repo, one place to clone, one place to update — rather than a
+scattering of single-purpose repos.
+
+**This repo is private.** Anything that needs to be fetched by an unauthenticated
+client — an installer one-liner, a `raw.githubusercontent.com` URL — cannot live
+here; it belongs in its own public repo. See [Related repos](#related-repos).
 
 Two kinds of thing live here, and the split is deliberate:
 
 | Directory | Holds | Consumed by |
 |---|---|---|
 | `skills/` | **Skills** — instructions an agent loads to do a job. Markdown first; any scripts are deterministic helpers the instructions call. | Claude (and other agents), at task time |
-| `tools/` | **Tools** — software a human installs and runs. Real programs with an installer and a config file. | You, on a machine |
+| `guidelines/` | **Doctrine** — how agent work is run at all: universal rules, host standards, team charters, and the enforcement that backs them. | You, when deciding how to route and run work |
 
 The test: if the artifact is *read by a model to decide what to do*, it is a skill.
-If it is *executed to produce a result*, it is a tool.
+If it is *read by a human to decide how agents are run*, it is doctrine.
 
 ## The skill standard (R11)
 
-Skills here follow **R11** of the Agent Operations Guide (`AGENT-OPERATIONS-GUIDE.md`, in the botguide repo):
-automation graduates through demonstrated reliability — manual task → corrected
-task → frozen skill → scheduled routine → team. Never skip a rung, and never
-schedule attempt #1. A method is frozen into a skill only after it has survived
-correction.
+Skills here follow **R11** of `guidelines/AGENT-OPERATIONS-GUIDE.md`: automation
+graduates through demonstrated reliability — manual task → corrected task →
+frozen skill → scheduled routine → team. Never skip a rung, and never schedule
+attempt #1. A method is frozen into a skill only after it has survived correction.
 
 A hardened skill states six things:
 
@@ -55,33 +58,31 @@ measured-off-linework).
 | `references/scope_kickoff.md` | Pre-estimate scoping template — which divisions to include, segregated scopes, exclusions. |
 | `README.md` | Human-facing overview of the skill. |
 
-### Tools
+### Guidelines
 
-**`tools/claude-statusline/`** (v2.0.0) — one statusline for every machine running
-Claude Code. Shows folder, model, effort level, git branch, context usage with
-escalating compact/handoff warnings, and the 5-hour and weekly rate-limit windows.
-Usage figures come from Claude Code's own `rate_limits` data, so they match
-claude.ai/settings/usage exactly. No ccusage, no npx, ~60ms per refresh.
-
-Install or update on any machine:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Dhinc1/agent-skills/main/tools/claude-statusline/install.sh | bash
-```
-
-Or from a checkout: `./tools/claude-statusline/install.sh`. Requires `jq`. On
-Windows, run it from Git Bash — see the tool's README for why.
+**`guidelines/`** — the operating doctrine. Start with `AGENT-OPERATIONS-GUIDE.md`;
+the rest are its companions.
 
 | File | What it is |
 |---|---|
-| `install.sh` | Installer/updater. Copies to `~/.claude/statusline/` and merges the `statusLine` entry into `~/.claude/settings.json` (backing it up first). Never overwrites your config. |
-| `statusline.sh` | The statusline itself. Reads Claude Code's JSON on stdin, writes one line. |
-| `statusline-config.json` | Default thresholds, colors, and per-segment on/off switches. Installed once, then yours. |
-| `README.md` | Segment-by-segment reference, color table, configuration, Windows notes, debugging. |
+| `AGENT-OPERATIONS-GUIDE.md` | The core guide (v0.2) — universal rules R1–R11, the routing rubric for deciding what runs where, kill criteria, and the lesson pipeline. Every rule cites the incident or source that earned it. |
+| `HERMES-AGENT-OPERATING-STANDARD.md` | Hermes mechanics — how the standard is implemented on that host. |
+| `HERMES-STANDING-TEAM-CHARTER.md` | Standing team roles, their metrics, and sunset criteria. |
+| `apply-enforcement.sh` | Moves rules from prose into the control layer, per R1. |
+| `regression-suite/` | The gatekeeper for model tier changes — a model enters or changes tier only on a full pass, never on "feels smarter". |
+| `README.md` | Overview of the doctrine set. |
+
+## Related repos
+
+| Repo | Why it's separate |
+|---|---|
+| [`Dhinc1/claude-statusline`](https://github.com/Dhinc1/claude-statusline) (public) | The Claude Code statusline. Public because its installer is fetched by `curl` from raw.githubusercontent.com, which requires an unauthenticated-readable repo. |
 
 ## Adding to this repo
 
-A new skill goes in `skills/<name>/` with a `SKILL.md` that covers all six R11
-fields. A new tool goes in `tools/<name>/` with an installer and a README that
-states its requirements. In both cases add a row to the Contents index above —
-an unindexed entry is one nobody will find.
+A new skill goes in `skills/<name>/` with a `SKILL.md` covering all six R11 fields.
+New doctrine goes in `guidelines/`. In both cases add a row to the Contents index
+above — an unindexed entry is one nobody will find.
+
+Before adding anything, ask whether it must be fetchable without credentials. If
+so, it needs its own public repo and a row in Related repos instead.
