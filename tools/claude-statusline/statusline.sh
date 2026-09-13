@@ -28,7 +28,7 @@ IFS=$'\x1f' read -r BAR_LENGTH CTX_WARN_PCT CTX_CRIT_PCT SESS_WARN_PCT WEEK_WARN
 $(jq -r '[
     (.display.bar_length // 10),
     (.thresholds.context_warn_pct // 40),
-    (.thresholds.context_critical_pct // 50),
+    (.thresholds.context_critical_pct // 61),
     (.thresholds.session_warn_pct // 70),
     (.thresholds.weekly_warn_pct // 60),
     (.display.session_activity_threshold_minutes // 5),

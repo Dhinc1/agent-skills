@@ -64,7 +64,7 @@ You've used 44% of your rolling 5-hour allowance. Colors: normal → orange at 7
 
 ### `wk 62% → 2d` — weekly usage window
 
-62% of the 7-day allowance used, resetting in 2 days. Rounded to whole days; under 24 hours it reads `<1d`. Colors: normal → orange at 60% → red at 85%.
+62% of the 7-day allowance used, resetting in 2 days. Rounded to the nearest day, so 12 to 24 hours out still reads `1d`; only below roughly 12 hours does it read `<1d`. Colors: normal → orange at 60% → red at 85%.
 
 Both usage figures come from Claude Code's own account data, so they **match claude.ai/settings/usage exactly** and are shared across all your machines automatically — burn budget on one box and the others show it too. That's why this needs no external usage tooling.
 
