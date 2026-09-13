@@ -58,6 +58,20 @@ measured-off-linework).
 | `references/scope_kickoff.md` | Pre-estimate scoping template — which divisions to include, segregated scopes, exclusions. |
 | `README.md` | Human-facing overview of the skill. |
 
+**`skills/pdf-markup/`** — marks up PDFs the way you would in Bluebeam: highlights,
+boxes, revision clouds, callouts, arrows, stamps, and redactions, produced as real
+editable PDF annotations rather than a flattened image. It renders the page to an
+image with a coordinate grid first, so it can *see* the sheet before placing
+anything — which also makes it a visual inspection tool for scanned drawings with
+no text layer (count the fixtures, check a dimension, and mark each one as it goes).
+The source file is never modified; redaction is the one destructive op and it
+confirms first.
+
+| File | What it is |
+|---|---|
+| `SKILL.md` | The skill definition — the render-first loop, coordinate system, the markup spec format, and every op type. |
+| `scripts/pdf_markup.py` | The single script behind it: `info`, `text`, `render`, `list`, `apply`. Requires `pymupdf` and `pillow`. |
+
 ### Guidelines
 
 **`guidelines/`** — the operating doctrine. Start with `AGENT-OPERATIONS-GUIDE.md`;
