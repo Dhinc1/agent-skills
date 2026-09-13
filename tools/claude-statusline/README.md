@@ -9,7 +9,7 @@ statusline | o5(1m) | hi | main | 240k/1000k [██░░░░░░░░] 24
 ## Install (any machine)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Dhinc1/claude-statusline/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Dhinc1/agent-skills/main/tools/claude-statusline/install.sh | bash
 ```
 
 Re-run the same command to update. Your local `statusline-config.json` is never overwritten. Requires `jq` (the installer tells you how to get it if missing).

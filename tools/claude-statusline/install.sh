@@ -1,11 +1,11 @@
 #!/bin/bash
 # claude-statusline installer/updater
 # From a checkout:   ./install.sh
-# From anywhere:     curl -fsSL https://raw.githubusercontent.com/Dhinc1/claude-statusline/main/install.sh | bash
+# From anywhere:     curl -fsSL https://raw.githubusercontent.com/Dhinc1/agent-skills/main/tools/claude-statusline/install.sh | bash
 # Re-running updates the script in place. Your config is never overwritten.
 set -euo pipefail
 
-REPO_RAW="${STATUSLINE_REPO:-https://raw.githubusercontent.com/Dhinc1/claude-statusline/main}"
+REPO_RAW="${STATUSLINE_REPO:-https://raw.githubusercontent.com/Dhinc1/agent-skills/main/tools/claude-statusline}"
 DEST="$HOME/.claude/statusline"
 SETTINGS="$HOME/.claude/settings.json"
 
