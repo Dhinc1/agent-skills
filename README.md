@@ -1,18 +1,15 @@
 # agent-skills
 
-A catalog of the agent skills and operating doctrine used across CoveConstruct
+A catalog of the agent skills and developer tools used across CoveConstruct
 work. One repo, one place to clone, one place to update — rather than a
 scattering of single-purpose repos.
-
-**This repo is private.** Anything that needs to be fetched by an unauthenticated
-client — an installer one-liner, a `raw.githubusercontent.com` URL — cannot live
-here; it belongs in its own public repo. See [Related repos](#related-repos).
 
 Two kinds of thing live here, and the split is deliberate:
 
 | Directory | Holds | Consumed by |
 |---|---|---|
 | `skills/` | **Skills** — instructions an agent loads to do a job. Markdown first; any scripts are deterministic helpers the instructions call. | Claude (and other agents), at task time |
+| `tools/` | **Tools** — software you install and run. A real program with an installer and a config file. | You, on a machine |
 
 The test: if the artifact is *read by a model to decide what to do*, it is a skill.
 If it is *executed by you to produce a result*, it is a tool.
@@ -72,12 +69,35 @@ confirms first.
 | `SKILL.md` | The skill definition — the render-first loop, coordinate system, the markup spec format, and every op type. |
 | `scripts/pdf_markup.py` | The single script behind it: `info`, `text`, `render`, `list`, `apply`. Requires `pymupdf` and `pillow`. |
 
+### Tools
+
+**`tools/claude-statusline/`** (v2.0.0) — one statusline for every machine running
+Claude Code. Shows folder, model, effort level, git branch, context usage with
+escalating compact/handoff warnings, and the 5-hour and weekly rate-limit windows.
+Usage figures come from Claude Code's own `rate_limits` data, so they match
+claude.ai/settings/usage exactly. No ccusage, no npx, ~60ms per refresh.
+
+Install or update on any machine:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Dhinc1/agent-skills/main/tools/claude-statusline/install.sh | bash
+```
+
+Or from a checkout: `./tools/claude-statusline/install.sh`. Requires `jq`. On
+Windows, run it from Git Bash — see the tool's README for why.
+
+| File | What it is |
+|---|---|
+| `install.sh` | Installer/updater. Copies to `~/.claude/statusline/` and merges the `statusLine` entry into `~/.claude/settings.json` (backing it up first). Never overwrites your config. |
+| `statusline.sh` | The statusline itself. Reads Claude Code's JSON on stdin, writes one line. |
+| `statusline-config.json` | Default thresholds, colors, and per-segment on/off switches. Installed once, then yours. |
+| `README.md` | Segment-by-segment reference, color table, configuration, Windows notes, debugging. |
+
 ## Related repos
 
 | Repo | Why it's separate |
 |---|---|
 | `Dhinc1/bot-guidelines` (private) | The operating doctrine these skills are written against — universal rules R1–R11, host standards, team charter, enforcement. Private: it is work in progress and describes internal infrastructure. |
-| [`Dhinc1/claude-statusline`](https://github.com/Dhinc1/claude-statusline) (public) | The Claude Code statusline. Public because its installer is fetched by `curl` from raw.githubusercontent.com, which requires an unauthenticated-readable repo. |
 
 ## Adding to this repo
 
@@ -85,5 +105,5 @@ A new skill goes in `skills/<name>/` with a `SKILL.md` covering all six R11 fiel
 plus a row in the Contents index above — an unindexed entry is one nobody will
 find. New doctrine goes in `Dhinc1/bot-guidelines`, not here.
 
-Before adding anything, ask whether it must be fetchable without credentials. If
-so, it needs its own public repo and a row in Related repos instead.
+A new tool goes in `tools/<name>/` with an installer and a README stating its
+requirements.
