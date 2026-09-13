@@ -7,6 +7,13 @@ projects add items. When a plan shows something not here, add it, don't drop it.
 Column meaning: **Item** = pay item as it appears in bids. **UOM** = unit it is
 bid in. **Basis** = what the quantity is measured from on the plans.
 
+> v2: every quantity here should land in the element ledger
+> (`takeoff/elements.json`) with a source sheet and a High/Medium/Low
+> confidence tag, not just a number in the worksheet. Any measured (not
+> schedule-stated) length or area feeding a pay item gets the blind
+> anchor-dimension check before it ships. See SKILL.md, "Reconcile before it
+> ships."
+
 ## Units glossary
 EA (each) · LS (lump sum) · LF (linear feet) · SY (square yard) · SF (square
 foot) · CY (cubic yard) · AC (acre) · TN (ton) · VF (vertical foot) · Months ·
@@ -82,6 +89,11 @@ UOM: LF, EA, LS
 > everything else at the same diameter. If the budget template only has a
 > Class III line for that size, that's a template gap, not a reason to price
 > the Class IV run at the Class III rate — flag it.
+> This is the Cottages at Back Creek pipe-schedule lesson: transcribe every
+> pipe schedule row into the element ledger with size AND class as separate
+> fields before pricing, then reconcile ledger rows against the schedule's own
+> row count (see SKILL.md Step 5a) — that catch is what a 15"/12" transposition
+> needs to surface before the budget ships.
 
 ## 07 — Sanitary Sewer (Main Line)
 UOM: LF, EA, VF, Day
@@ -134,10 +146,17 @@ UOM: SY, TN, LF, SF, EA, LS
 > calls for one intermediate lift plus a separate final surface/overlay course
 > — check whether a final surface course is already priced elsewhere (a
 > post-construction overlay line, for instance) before assuming every active
-> lift row in the paving section is distinct scope.
+> lift row in the paving section is distinct scope. This is the Cottages at
+> Back Creek duplicate-lift lesson — audit every active row in a budget
+> section against the actual pavement detail before touching a rate, not just
+> the row you're editing.
 > Curb LF: a `2 × road centerline` formula is a placeholder, not a takeoff —
 > it misses cul-de-sac bulbs and intersection returns. Use a plan-stated
-> total or a real measured curb linetype when one is available.
+> total or a real measured curb linetype when one is available, and run the
+> blind anchor-dimension check against it (a second, independently-sourced
+> dimension — a plotted total, a different sheet's callout) before trusting a
+> formula-derived total. This is the Cottages at Back Creek curb-formula
+> lesson.
 
 ## 11 — BMP / Basin Conversion (permanent)
 UOM: SF, CY, EA, SY, AC

@@ -38,6 +38,17 @@ How the estimator tells onsite from offsite on this plan set:
 - Offsite work keyed by: (callout "OFFSITE" / named public road / NCDOT
   encroachment / station range beyond boundary)
 
+## Takeoff method (v2)
+- [ ] Small/simple set (few sheets, one or two disciplines) — Steps 1–4
+      (preprocess, summarize, index, answer queries) are enough.
+- [ ] Large/multi-discipline set, or a plan set that will get re-queried a
+      lot — also run Step 1b: structured DB (build_db.py) + provenance
+      validation (validate_provenance.py) before relying on any schedule
+      value pulled from it.
+Regardless of method: any measured (not schedule-stated) length or area that
+feeds a pay-item quantity gets the blind anchor-dimension check before it
+ships — see SKILL.md, "Reconcile before it ships."
+
 ## Known exclusions to carry
 Match the bid conventions so comparisons line up:
 - [ ] Geotech / soil testing
