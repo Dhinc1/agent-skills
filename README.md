@@ -13,14 +13,14 @@ Two kinds of thing live here, and the split is deliberate:
 | Directory | Holds | Consumed by |
 |---|---|---|
 | `skills/` | **Skills** — instructions an agent loads to do a job. Markdown first; any scripts are deterministic helpers the instructions call. | Claude (and other agents), at task time |
-| `guidelines/` | **Doctrine** — how agent work is run at all: universal rules, host standards, team charters, and the enforcement that backs them. | You, when deciding how to route and run work |
 
 The test: if the artifact is *read by a model to decide what to do*, it is a skill.
-If it is *read by a human to decide how agents are run*, it is doctrine.
+If it is *executed by you to produce a result*, it is a tool.
 
 ## The skill standard (R11)
 
-Skills here follow **R11** of `guidelines/AGENT-OPERATIONS-GUIDE.md`: automation
+Skills here follow **R11** of the Agent Operations Guide (kept privately in
+`Dhinc1/bot-guidelines`): automation
 graduates through demonstrated reliability — manual task → corrected task →
 frozen skill → scheduled routine → team. Never skip a rung, and never schedule
 attempt #1. A method is frozen into a skill only after it has survived correction.
@@ -72,31 +72,18 @@ confirms first.
 | `SKILL.md` | The skill definition — the render-first loop, coordinate system, the markup spec format, and every op type. |
 | `scripts/pdf_markup.py` | The single script behind it: `info`, `text`, `render`, `list`, `apply`. Requires `pymupdf` and `pillow`. |
 
-### Guidelines
-
-**`guidelines/`** — the operating doctrine. Start with `AGENT-OPERATIONS-GUIDE.md`;
-the rest are its companions.
-
-| File | What it is |
-|---|---|
-| `AGENT-OPERATIONS-GUIDE.md` | The core guide (v0.2) — universal rules R1–R11, the routing rubric for deciding what runs where, kill criteria, and the lesson pipeline. Every rule cites the incident or source that earned it. |
-| `HERMES-AGENT-OPERATING-STANDARD.md` | Hermes mechanics — how the standard is implemented on that host. |
-| `HERMES-STANDING-TEAM-CHARTER.md` | Standing team roles, their metrics, and sunset criteria. |
-| `apply-enforcement.sh` | Moves rules from prose into the control layer, per R1. |
-| `regression-suite/` | The gatekeeper for model tier changes — a model enters or changes tier only on a full pass, never on "feels smarter". |
-| `README.md` | Overview of the doctrine set. |
-
 ## Related repos
 
 | Repo | Why it's separate |
 |---|---|
+| `Dhinc1/bot-guidelines` (private) | The operating doctrine these skills are written against — universal rules R1–R11, host standards, team charter, enforcement. Private: it is work in progress and describes internal infrastructure. |
 | [`Dhinc1/claude-statusline`](https://github.com/Dhinc1/claude-statusline) (public) | The Claude Code statusline. Public because its installer is fetched by `curl` from raw.githubusercontent.com, which requires an unauthenticated-readable repo. |
 
 ## Adding to this repo
 
-A new skill goes in `skills/<name>/` with a `SKILL.md` covering all six R11 fields.
-New doctrine goes in `guidelines/`. In both cases add a row to the Contents index
-above — an unindexed entry is one nobody will find.
+A new skill goes in `skills/<name>/` with a `SKILL.md` covering all six R11 fields,
+plus a row in the Contents index above — an unindexed entry is one nobody will
+find. New doctrine goes in `Dhinc1/bot-guidelines`, not here.
 
 Before adding anything, ask whether it must be fetchable without credentials. If
 so, it needs its own public repo and a row in Related repos instead.
